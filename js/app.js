@@ -70,6 +70,12 @@ export default class App{
 
         })
 
+        formFilter.addEventListener("reset", (e)=>{
+          storage.clearFilters()
+          const res = storage.getFilteredData()
+          this.renderCatalog(res)
+        })
+
 
         allCheckboxes.forEach(checkbox=>{
             checkbox.addEventListener("change", (e)=>{

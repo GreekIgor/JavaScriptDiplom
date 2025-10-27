@@ -1,44 +1,66 @@
-class Storage{
+class Storage {
+  constructor() {
+    this.storageData = [];
+    this.filters = {};
+    this.filteredData = [];
+  }
 
-    constructor(){
-        this.storageData = []
-        this.filters = {}
-        this.filteredData = []
+  setFilter(filter) {
+    const key = Object.keys(filter)[0];
+    const value = filter[key];
+
+    if (key === 'type') {
+      // Накапливаем значения type в массив
+      if (this.filters.type === undefined) {
+        this.filters.type = [value];
+      } else if (Array.isArray(this.filters.type)) {
+        if (!this.filters.type.includes(value)) {
+          this.filters.type = [...this.filters.type, value];
+        }
+      } else {
+        // был строкой — преобразуем в массив
+        if (this.filters.type !== value) {
+          this.filters.type = [this.filters.type, value];
+        }
+      }
+    } else {
+      // Все остальные фильтры — просто перезаписываем
+      this.filters = { ...this.filters, ...filter };
     }
-
-// Добавить фильтр
-setFilter(filter)
-{
-    this.filters = { ...this.filters, ...filter };
     return this;
-}
-// Отменить фильтр 
-removeFilter(key) {
+  }
+
+  removeFilter(key) {
     const { [key]: _, ...rest } = this.filters;
     this.filters = rest;
     this.applyFilters();
   }
-//Удалить все фильтры
-clearFilters()
-{
-    this.filters = {}
-    this.filteredData = [...this.storageData];
-} 
 
-// Применить все фильтры
+  clearFilters() {
+    this.filters = {};
+    this.filteredData = [...this.storageData];
+  }
+
   applyFilters() {
     this.filteredData = this.storageData.filter(item => {
-      // === 1. Поиск по названию (частичное совпадение, регистронезависимо) ===
+      // === 1. Поиск по названию ===
       if (this.filters.search) {
         const term = this.filters.search.toLowerCase();
         if (!item.name.toLowerCase().includes(term)) return false;
       }
+
       // === 2. Фильтр по типу (item.type — массив) ===
-      if (this.filters.type && !item.type.includes(this.filters.type)) {
-        return false;
+      if (this.filters.type) {
+        const filterTypes = Array.isArray(this.filters.type)
+          ? this.filters.type
+          : [this.filters.type];
+
+        // Совпадение, если хотя бы один тип из item.type есть в filterTypes
+        const hasMatchingType = item.type.some(t => filterTypes.includes(t));
+        if (!hasMatchingType) return false;
       }
 
-      // === 3. Цена (по полю price.new) ===
+      // === 3. Цена ===
       if (this.filters.minPrice !== undefined && item.price.new < this.filters.minPrice) {
         return false;
       }
@@ -46,7 +68,7 @@ clearFilters()
         return false;
       }
 
-      // === 4. Наличие в конкретном городе ===
+      // === 4. Наличие в городах ===
       if (this.filters.inStockMoscow !== undefined) {
         const hasStock = item.availability.moscow > 0;
         if (this.filters.inStockMoscow && !hasStock) return false;
@@ -72,10 +94,10 @@ clearFilters()
 
       return true;
     });
-   return this.filteredData
+    return this.filteredData;
   }
 
-getFilteredData() {
+  getFilteredData() {
     return this.filteredData;
   }
 
@@ -90,22 +112,17 @@ getFilteredData() {
 
   getActiveFilters() {
     return this.filters;
-    }  
+  }
 
-setStorage(data)
-{
-    this.storageData = data
-    this.clearFilters()
+  setStorage(data) {
+    this.storageData = data;
+    this.clearFilters();
+  }
+
+  getStorage() {
+    return this.storageData;
+  }
 }
 
-getStorage()
-{
-    return this.storageData
-}
-
-
-
-}
-const storage = new Storage()
-
-export default storage
+const storage = new Storage();
+export default storage;
