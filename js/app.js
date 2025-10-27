@@ -91,10 +91,16 @@ export default class App{
    const menuButton = document.querySelector(".header__catalog-btn");
    const locationCityName = document.querySelector(".location__city-name");
    const mainMenu = document.querySelector(".main-menu");
+   const basketBtn = document.querySelector(".header__user-btn");
+   const basket = document.querySelector(".basket");
    menuButton.addEventListener('click', ()=>{
     console.log("нажали кнопку")
         
         mainMenu.classList.toggle("main-menu--active")
+   })
+
+   basketBtn.addEventListener("click", ()=>{
+      basket.classList.toggle("basket--active")
    })
 
    const menuButtonClose = document.querySelector(".main-menu__close")
