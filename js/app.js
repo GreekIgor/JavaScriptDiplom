@@ -95,6 +95,18 @@ export default class App{
    const mainMenu = document.querySelector(".main-menu");
    const basketBtn = document.querySelector(".header__user-btn");
    const basket = document.querySelector(".basket");
+
+  const accordionBtn = document.querySelectorAll('.accordion__btn')
+  
+  accordionBtn.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+    const isActive = btn.classList.contains('accordion__btn--active')  
+    accordionBtn.forEach(btn=>btn.classList.remove('accordion__btn--active')) 
+    if(!isActive) 
+    btn.classList.add('accordion__btn--active')
+  })
+  })
+
    menuButton.addEventListener('click', ()=>{
     console.log("нажали кнопку")
         
