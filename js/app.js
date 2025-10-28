@@ -1,4 +1,5 @@
 import { createCatalogItem } from "./components/card.js"
+import renderPaginate from "./components/paginate.js";
 import storage from "./storage.js"
 
 export default class App{
@@ -16,7 +17,7 @@ export default class App{
         this.initElement()
         const data = await this.getData()
         storage.setStorage(data)
-        this.renderCatalog(storage.getStorage())
+        this.renderPage()
         this.getAmmountType()
         this.initEventsFilter()
     }
@@ -46,43 +47,44 @@ export default class App{
     {
 
         const formFilter = document.querySelector(".catalog-form")
-        const allCheckboxes = formFilter.querySelectorAll("input[type=checkbox]")
+        const allCheckboxesAndRadio = formFilter.querySelectorAll("input[type]")
 
 
         formFilter.addEventListener("submit", (e)=>{
             e.preventDefault()
              const formData = new FormData(formFilter);
 
+            
+            storage.setFilter({status:formData.get('status')}) 
+
             if (formData.has('goodsOfDay')) this.filters.goodsOfDay = true;
             if (formData.has('inStockMoscow')) this.filters.inStockMoscow = true;
             if (formData.has('inStockOrenburg')) this.filters.inStockOrenburg = true;
             if (formData.has('inStockSaintPetersburg')) this.filters.inStockSaintPetersburg = true;
             const types = formData.getAll('type'); 
-            console.log(types)
             types.forEach(type=>{
                  storage.setFilter({type})
             })
             storage.setFilter(this.filters)
-            const res = storage.applyFilters()
-           console.log('result',res)
-           this.renderCatalog(res)
-           console.log("filters", storage.getActiveFilters())
+            storage.applyFilters()
+            this.renderPage()
+            console.log("filters", storage.getActiveFilters())
 
         })
 
         formFilter.addEventListener("reset", (e)=>{
           storage.clearFilters()
-          const res = storage.getFilteredData()
-          this.renderCatalog(res)
+          this.renderPage()
         })
 
 
-        allCheckboxes.forEach(checkbox=>{
+        allCheckboxesAndRadio.forEach(checkbox=>{
             checkbox.addEventListener("change", (e)=>{
                 e.preventDefault()
                 formFilter.requestSubmit()
             })
         })
+
 
     }
 
@@ -127,6 +129,14 @@ export default class App{
     const response = await fetch("data/data.json")
     return await response.json();
     }
+
+
+   renderPage(page = 1)
+   {
+    renderPaginate()
+    const data = storage.getPage(page)
+    this.renderCatalog(data)
+   }
 
     async renderCatalog(data)
     {

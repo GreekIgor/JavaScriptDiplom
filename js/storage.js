@@ -49,6 +49,13 @@ class Storage {
         if (!item.name.toLowerCase().includes(term)) return false;
       }
 
+      if(this.filters.status == "instock")
+      {
+
+            if (item.availability.moscow>0 || item.availability.orenburg>0 || item.availability.saintPetersburg>0) return true;
+
+      }
+
       // === 2. Фильтр по типу (item.type — массив) ===
       if (this.filters.type) {
         const filterTypes = Array.isArray(this.filters.type)
@@ -101,7 +108,7 @@ class Storage {
     return this.filteredData;
   }
 
-  getPage(page = 1, pageSize = 10) {
+  getPage(page = 1, pageSize = 5) {
     const start = (page - 1) * pageSize;
     return this.filteredData.slice(start, start + pageSize);
   }
