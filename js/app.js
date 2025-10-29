@@ -1,5 +1,5 @@
-import { createCatalogItem } from "./components/card.js"
-import renderPaginate from "./components/paginate.js";
+
+import { renderPage } from "./render.js";
 import storage from "./storage.js"
 
 export default class App{
@@ -131,21 +131,7 @@ export default class App{
     }
 
 
-   renderPage(page = 1)
-   {
-    renderPaginate()
-    const data = storage.getPage(page)
-    this.renderCatalog(data)
-   }
 
-    async renderCatalog(data)
-    {
-      this.catalog.innerHTML = ''
-
-     data.forEach((item) => {
-       this.catalog.append(createCatalogItem(item)) 
-    });
-    }
 
 
 }
