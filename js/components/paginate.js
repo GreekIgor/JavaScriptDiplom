@@ -1,5 +1,6 @@
 import storage from "../storage.js";
 import { createElement } from "./components.js";
+import { renderPage } from "../render.js";
 
 export default function renderPaginate(){
  const paginateList = document.querySelector(".catalog__pagination")   
@@ -11,6 +12,11 @@ export default function renderPaginate(){
     const li =  createElement('li', 'catalog__pagination')
     const button = createElement('button', 'catalog__pagination-link')
     button.textContent = num
+
+    button.addEventListener('click', ()=>{
+         renderPage(num)
+    })
+    
     li.append(button)
     paginateList.append(li)
     }

@@ -7,8 +7,7 @@ export default class App{
 
     static TYPE = ["pendant", "nightlights", "overhead", "point","ceiling"];
 
-    constructor (catalog){
-      this.catalog = catalog 
+    constructor (){
       this.filters = {} 
     }
 
@@ -17,7 +16,7 @@ export default class App{
         this.initElement()
         const data = await this.getData()
         storage.setStorage(data)
-        this.renderPage()
+        renderPage()
         this.getAmmountType()
         this.initEventsFilter()
     }
@@ -48,6 +47,7 @@ export default class App{
 
         const formFilter = document.querySelector(".catalog-form")
         const allCheckboxesAndRadio = formFilter.querySelectorAll("input[type]")
+        const sortFilter = document.querySelector('.catalog__sort-select')
 
 
         formFilter.addEventListener("submit", (e)=>{
@@ -67,14 +67,14 @@ export default class App{
             })
             storage.setFilter(this.filters)
             storage.applyFilters()
-            this.renderPage()
+            renderPage()
             console.log("filters", storage.getActiveFilters())
 
         })
 
         formFilter.addEventListener("reset", (e)=>{
           storage.clearFilters()
-          this.renderPage()
+          renderPage()
         })
 
 
@@ -83,6 +83,10 @@ export default class App{
                 e.preventDefault()
                 formFilter.requestSubmit()
             })
+        })
+
+        sortFilter.addEventListener('change', ()=>{
+            storage.setSort(sortFilter.value)
         })
 
 

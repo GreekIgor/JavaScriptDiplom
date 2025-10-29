@@ -3,6 +3,7 @@ class Storage {
     this.storageData = [];
     this.filters = {};
     this.filteredData = [];
+    this.sortType = null;
   }
 
   setFilter(filter) {
@@ -30,6 +31,14 @@ class Storage {
     return this;
   }
 
+
+    setSort(sortType) {
+
+    this.sortType = sortType;
+    this.applyFilters();
+    return this;
+  }
+
   removeFilter(key) {
     const { [key]: _, ...rest } = this.filters;
     this.filters = rest;
@@ -52,7 +61,7 @@ class Storage {
       if(this.filters.status == "instock")
       {
 
-            if (item.availability.moscow>0 || item.availability.orenburg>0 || item.availability.saintPetersburg>0) return true;
+            if (item.availability.moscow==0 && item.availability.orenburg==0 && item.availability.saintPetersburg==0) return true;
 
       }
 
@@ -101,6 +110,24 @@ class Storage {
 
       return true;
     });
+
+
+   if (this.sortType) {
+      switch (this.sortType) {
+        case 'price-min':
+          this.filteredData.sort((a, b) => a.price.new - b.price.new);
+          break;
+        case 'price-max':
+          this.filteredData.sort((a, b) => b.price.new - a.price.new);
+          break;
+        case 'rating-max':
+          this.filteredData.sort((a, b) => b.rating - a.rating);
+          break;
+        default:
+          break;
+      }
+    }
+
     return this.filteredData;
   }
 

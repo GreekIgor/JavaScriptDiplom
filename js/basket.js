@@ -44,7 +44,7 @@ class Basket{
     const spanPrice = createElement('span', 'basket__price')
     spanPrice.textContent = `${item.price.new} руб`
     const btnClose = createElement('button', 'basket__item-close', {type:'button'})
-    const icon = createIcon('icon-user')
+    const icon = createIcon('icon-close',24,24, 'main-menu__close')
 
     btnClose.addEventListener('click', (e)=>{
         basket.removeProduct(item.id)
