@@ -90,6 +90,7 @@ export default class App{
 
         sortFilter.addEventListener('change', ()=>{
             storage.setSort(sortFilter.value)
+            formFilter.requestSubmit()
         })
 
 
