@@ -1,6 +1,7 @@
 
 import { renderPage, renderDayProduct } from "./render.js";
 import storage from "./storage.js"
+import { initValidate } from "./components/validate.js";
 
 export default class App{
     
@@ -20,6 +21,7 @@ export default class App{
         renderDayProduct()
         this.getAmmountType()
         this.initEventsFilter()
+        initValidate()
     }
 
 
