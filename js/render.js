@@ -1,12 +1,27 @@
    import renderPaginate from "./components/paginate.js";
    import storage from "./storage.js"
-   import { createCatalogItem } from "./components/card.js"
+   import { createCatalogItem,createDayProductItem } from "./components/card.js"
+   import { initSwipper } from "./components/slider.js";
 
    function renderPage(page = 1)
    {
     renderPaginate()
     const data = storage.getPage(page)
     renderCatalog(data)
+   }
+
+   function renderDayProduct()
+   {
+    const catalogGoodsOfDay = document.querySelector(".day-products__list");
+    catalogGoodsOfDay.innerHTML = ''
+    const data = storage.getStorage()
+    const goodsOfDay = data.filter(item=>{
+      return item.goodsOfDay
+    })
+    goodsOfDay.forEach(item=>{
+      catalogGoodsOfDay.append(createDayProductItem(item))
+    })
+    initSwipper()
    }
 
     async function renderCatalog(data)
@@ -19,4 +34,4 @@
     });
     }
 
-    export {renderCatalog, renderPage}
+    export {renderCatalog, renderPage, renderDayProduct}

@@ -1,5 +1,5 @@
 
-import { renderPage } from "./render.js";
+import { renderPage, renderDayProduct } from "./render.js";
 import storage from "./storage.js"
 
 export default class App{
@@ -17,6 +17,7 @@ export default class App{
         const data = await this.getData()
         storage.setStorage(data)
         renderPage()
+        renderDayProduct()
         this.getAmmountType()
         this.initEventsFilter()
     }

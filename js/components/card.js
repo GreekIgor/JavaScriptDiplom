@@ -1,11 +1,12 @@
 import {createElement, createIcon, createImage} from './components.js'
 import basket from '../basket.js';
+import storage from "../storage.js"
 
 
 
 // Кнопка "В корзину"
-function createAddToCartButton() {
-  const btn = createElement('a', 'product-card__link btn btn--icon', { href: '#' });
+function createAddToCartButton(data_id) {
+  const btn = createElement('a', 'product-card__link btn btn--icon', { href: '#', "data-id": data_id });
   const span = createElement('span', 'btn__text', { text: 'В корзину' });
   btn.append(span, createIcon('icon-basket'));
   return btn;
@@ -20,10 +21,15 @@ function createDetailsButton() {
 
 function createMoreActions(product) {
   const div = createElement('div', 'product-card__more');
-  const cardButton = createAddToCartButton();
+  const cardButton = createAddToCartButton(product.id);
 
-  cardButton.addEventListener('click', ()=>{
-       basket.addProduct(product)
+  cardButton.addEventListener('click', (e)=>{
+      const data_id =  e.target.getAttribute("data-id")
+
+       const fproduct = storage.getStorage().find(item=>{
+       return item.id == data_id
+       })
+       basket.addProduct(fproduct)
        console.log(basket.getProducts())
   })
   div.append(cardButton, createDetailsButton());
@@ -126,10 +132,24 @@ function createProductCard(product) {
   return card;
 }
 
+function createProductCardSmall(product) {
+  const card = createElement('div', 'product-card product-card--small');
+  card.append(
+    createVisualBlock(product)
+  );
+  return card;
+}
+
 function createCatalogItem(product) {
   const li = createElement('li', 'catalog__item');
   li.appendChild(createProductCard(product));
   return li;
 }
 
-export {createCatalogItem}
+function createDayProductItem(product) {
+  const li = createElement('li', 'day-products__item');
+  li.appendChild(createProductCardSmall(product));
+  return li;
+}
+
+export {createCatalogItem, createDayProductItem}
