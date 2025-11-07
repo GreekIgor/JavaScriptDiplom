@@ -3,12 +3,23 @@ class Basket{
 
     constructor (){
         this.basket = []
+        this.basketList = document.querySelector('.basket__list');
+        this.basketEmpty =  document.querySelector('.basket__empty-block')
+        this.basketCount = document.querySelector('.header__user-count')
+    }
+
+    calculateCountInbasket()
+    {
+      this.basketEmpty.style.display = this.basket.length === 0 ? 'block' : 'none';
+      this.basketCount.textContent = this.basket.length
     }
 
     addProduct(product)
     {
      this.basket.push(product)
-     this.renderBasket()
+     const li = this.createItemBasket(product)
+    this.basketList.append(li)
+    this.calculateCountInbasket()
     }
 
     getProducts()
@@ -19,23 +30,15 @@ class Basket{
     removeProduct(id)
     {
         this.basket = this.basket.filter(item => item.id !== id);
-        this.renderBasket()
+        const item = document.querySelector(`li[data-id="${id}"]`)
+        item.remove()
+        this.calculateCountInbasket()
     }
 
-
-    renderBasket()
+    createItemBasket(item)
     {
-      const basketEmpty =  document.querySelector('.basket__empty-block')
-      const basketCount = document.querySelector('.header__user-count')
 
-      basketEmpty.style.display = this.basket.length === 0 ? 'block' : 'none';
-      basketCount.textContent = this.basket.length
-
-      const basketList = document.querySelector('.basket__list');
-      basketList.innerHTML = ''
-
-    this.basket.forEach(item=>{
-     const li =  createElement('li', 'basket__item')
+    const li =  createElement('li', 'basket__item', {"data-id": item.id})
     const divImg = createElement('div', 'basket__img')
     const img = createElement('img', '', {height:60, width: 60, alt: 'Фотография товара', src: item.image})
     divImg.append(img)
@@ -52,8 +55,23 @@ class Basket{
     
     btnClose.append(icon)
     li.append(divImg, spanName, spanPrice , btnClose)
+    return li
+    }
+
+    renderBasket()
+    {
+      
+
+      this.basketEmpty.style.display = this.basket.length === 0 ? 'block' : 'none';
+      this.basketCount.textContent = this.basket.length
+      this.basketList.innerHTML = ''
+
+    this.basket.forEach(item=>{
+    const li = this.createItemBasket(item)
     basketList.append(li)
     })
+
+    this.calculateCountInbasket()
 
    
     }

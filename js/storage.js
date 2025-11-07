@@ -61,7 +61,7 @@ class Storage {
       if(this.filters.status == "instock")
       {
 
-            if (item.availability.moscow==0 && item.availability.orenburg==0 && item.availability.saintPetersburg==0) return true;
+            if (item.availability.moscow==0 && item.availability.orenburg==0 && item.availability.saintPetersburg==0) return false;
 
       }
 
