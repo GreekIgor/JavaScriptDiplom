@@ -24,6 +24,7 @@ export default class App{
         this.initEventsFilter()
         initValidate()
         basket.calculateCountInbasket()
+        this.initEventForm()
     }
 
 
@@ -96,6 +97,32 @@ export default class App{
         })
 
 
+    }
+
+
+    initEventForm()
+    {
+      const form = document.querySelector(".questions__form")
+      form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+      const formData = new FormData(form)
+      const formUrl = form.getAttribute("action")
+
+      fetch(formUrl, {
+        method: "POST",
+        body: formData
+      } ).then(res=>{
+       if (res.ok) 
+       alert("Форма успешно отправлена")
+      else
+       alert("Не удалось отправить форму")
+      }).catch(e=>{
+       alert("Не удалось отправить форму") 
+      });
+
+
+
+      })
     }
 
 

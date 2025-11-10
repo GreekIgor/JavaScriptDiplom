@@ -19,8 +19,9 @@
       return item.goodsOfDay
     })
     goodsOfDay.forEach(item=>{
-      catalogGoodsOfDay.append(createDayProductItem(item))
+      catalogGoodsOfDay.append(createCatalogItem(item))
     })
+    
     initSwipper()
    }
 
